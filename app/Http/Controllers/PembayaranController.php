@@ -25,14 +25,28 @@ class PembayaranController extends Controller
 
     public function store(Request $request)
     {
+        // DEBUG LOGGING
+        \Log::info('Auth ID: ' . Auth::id());
+        \Log::info('Transaksi ID: ' . $request->transaksi_id);
+        \Log::info('Has File? ' . ($request->hasFile('bukti_bayar') ? 'yes' : 'no'));
+
         $request->validate([
             'transaksi_id' => 'required|exists:transaksis,id',
-            'bukti_bayar' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'bukti_bayar' => 'required|file|mimes:jpg,jpeg,png',
         ]);
+
+        // VALIDASI USER HARUS LOGIN
+        if (!Auth::check()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
 
         $transaksi = Transaksi::where('id', $request->transaksi_id)
             ->where('user_id', Auth::id())
-            ->firstOrFail();
+            ->first();
+
+        if (!$transaksi) {
+            return response()->json(['message' => 'Transaksi tidak ditemukan atau bukan milik Anda'], 403);
+        }
 
         $path = $request->file('bukti_bayar')->store('bukti_bayar', 'public');
 
@@ -60,7 +74,7 @@ class PembayaranController extends Controller
     {
         $request->validate([
             'status' => 'required|in:pending,verifikasi',
-            'bukti_bayar' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'bukti_bayar' => 'nullable|file|mimes:jpg,jpeg,png',
         ]);
 
         $data = $request->only('status');

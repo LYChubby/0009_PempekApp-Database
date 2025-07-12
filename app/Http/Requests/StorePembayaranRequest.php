@@ -23,7 +23,7 @@ class StorePembayaranRequest extends FormRequest
     {
         return [
             'pemesanan_id' => 'required|exists:pemesanans,id',
-            'bukti_bayar'  => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'bukti_bayar'  => 'required|image|mimes:jpg,jpeg,png',
         ];
     }
 }

@@ -31,6 +31,7 @@ class TransaksiRequest extends FormRequest
             'items.*.harga_satuan' => 'required|integer',
             'items.*.total_harga' => 'required|integer',
             'items.*.status_bayar' => 'sometimes|in:belum,sudah',
+            'bukti_bayar' => 'sometimes|image|mimes:jpg,jpeg,png',
         ];
     }
 }

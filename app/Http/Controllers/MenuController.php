@@ -19,8 +19,10 @@ class MenuController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('gambar')) {
-            $data['gambar'] = $request->file('gambar')->store('menu', 'public');
-        }
+        // Hapus 'menu/' yang duplikat
+        $data['gambar'] = $request->file('gambar')->store('menu', 'public');
+    }
+
 
         $menu = Menu::create($data);
 

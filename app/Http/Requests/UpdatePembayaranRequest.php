@@ -22,7 +22,7 @@ class UpdatePembayaranRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'bukti_bayar' => 'sometimes|image|mimes:jpg,jpeg,png|max:2048',
+            'bukti_bayar' => 'sometimes|image|mimes:jpg,jpeg,png',
             'status' => 'sometimes|in:pending,terverifikasi',
         ];
     }

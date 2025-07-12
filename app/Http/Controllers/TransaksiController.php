@@ -44,7 +44,10 @@ class TransaksiController extends Controller
             }
 
             DB::commit();
-            return response()->json(['message' => 'Checkout berhasil'], 201);
+            return response()->json([
+    'message' => 'Checkout berhasil',
+    'data' => ['id' => $transaksi->id]
+], 201);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['message' => 'Checkout gagal', 'error' => $e->getMessage()], 500);
