@@ -133,19 +133,19 @@
         <div class="customer-info">
             <div class="info-row">
                 <span class="info-label">Nama Customer:</span>
-                <span>{{ $pemesanan->user->name ?? 'N/A' }}</span>
+                <span>{{ $user->name ?? 'N/A' }}</span>
             </div>
             <div class="info-row">
                 <span class="info-label">Tanggal:</span>
-                <span>{{ $pemesanan->created_at->format('d-m-Y H:i') ?? 'N/A' }}</span>
+                <span>{{ $transaksi->created_at ? $transaksi->created_at->format('d-m-Y H:i') : 'N/A' }}</span>
             </div>
             <div class="info-row">
                 <span class="info-label">Pengiriman:</span>
-                <span>{{ $pemesanan->transaksi->pengiriman ?? 'N/A' }}</span>
+                <span>{{ $transaksi->pengiriman ?? 'N/A' }}</span>
             </div>
             <div class="info-row">
                 <span class="info-label">Metode Pembayaran:</span>
-                <span>{{ $pemesanan->transaksi->metode_pembayaran ?? 'N/A' }}</span>
+                <span>{{ $transaksi->metode_pembayaran ?? 'N/A' }}</span>
             </div>
         </div>
         
@@ -159,38 +159,42 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>{{ $pemesanan->menu->nama ?? 'N/A' }}</td>
-                    <td>{{ $pemesanan->jumlah ?? 0 }}</td>
-                    <td>Rp {{ number_format($pemesanan->harga_satuan ?? 0, 0, ',', '.') }}</td>
-                    <td>Rp {{ number_format($pemesanan->total_harga ?? 0, 0, ',', '.') }}</td>
-                </tr>
+                @php $total = 0; @endphp
+                @foreach ($pemesanans as $pesanan)
+                    <tr>
+                        <td>{{ $pesanan->menu->nama ?? 'N/A' }}</td>
+                        <td>{{ $pesanan->jumlah ?? 0 }}</td>
+                        <td>Rp {{ number_format($pesanan->harga_satuan ?? 0, 0, ',', '.') }}</td>
+                        <td>Rp {{ number_format($pesanan->total_harga ?? 0, 0, ',', '.') }}</td>
+                    </tr>
+                    @php $total += $pesanan->total_harga ?? 0; @endphp
+                @endforeach
                 <tr style="font-weight: bold; background-color: #f0f0f0;">
                     <td colspan="3" style="text-align: right;">Total Pembayaran:</td>
-                    <td>Rp {{ number_format($pemesanan->total_harga ?? 0, 0, ',', '.') }}</td>
+                    <td>Rp {{ number_format($total, 0, ',', '.') }}</td>
                 </tr>
             </tbody>
         </table>
         
         <div class="info-row" style="margin-top: 15px;">
             <span class="info-label">Status Bayar:</span>
-            <span class="status status-{{ strtolower($pemesanan->transaksi->status_bayar ?? 'unpaid') }}">
-                {{ ucfirst($pemesanan->transaksi->status_bayar ?? 'Belum dibayar') }}
+            <span class="status status-{{ strtolower($transaksi->status_bayar ?? 'unpaid') }}">
+                {{ ucfirst($transaksi->status_bayar ?? 'Belum dibayar') }}
             </span>
         </div>
-        
+
         <div class="info-row">
             <span class="info-label">Status Pembayaran:</span>
-            <span class="status status-{{ strtolower($pemesanan->transaksi->pembayaran->status ?? 'unpaid') }}">
-                {{ $pemesanan->transaksi->pembayaran->status ?? 'Belum dibayar' }}
+            <span class="status status-{{ strtolower($pembayaran->status ?? 'unpaid') }}">
+                {{ $pembayaran->status ?? 'Belum dibayar' }}
             </span>
         </div>
-        
-        @if($pemesanan->transaksi->pembayaran->bukti_bayar ?? false)
-        <div class="info-row">
-            <span class="info-label">Bukti Bayar:</span>
-            <span>Terlampir</span>
-        </div>
+
+        @if($pembayaran && $pembayaran->bukti_bayar)
+            <div class="info-row">
+                <span class="info-label">Bukti Bayar:</span>
+                <span>Terlampir</span>
+            </div>
         @endif
         
         <div class="footer">

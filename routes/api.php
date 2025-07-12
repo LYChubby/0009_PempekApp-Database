@@ -29,7 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/checkout', [TransaksiController::class, 'store']);
 
-     Route::get('/export-struk/{pemesanan}', [ExportController::class, 'exportStruk']);
+     Route::get('/export-struk/{checkout}', [ExportController::class, 'exportStruk']);
 
     // Pembayaran (public untuk customer)
     Route::apiResource('pembayaran', PembayaranController::class)->only(['index', 'show', 'store']);
