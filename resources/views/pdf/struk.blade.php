@@ -137,7 +137,10 @@
             </div>
             <div class="info-row">
                 <span class="info-label">Tanggal:</span>
-                <span>{{ $transaksi->created_at ? $transaksi->created_at->format('d-m-Y H:i') : 'N/A' }}</span>
+                <span>
+                    {{ $transaksi->created_at ? $transaksi->created_at->format('d-m-Y H:i') : 'N/A' }}
+                </span>
+
             </div>
             <div class="info-row">
                 <span class="info-label">Pengiriman:</span>

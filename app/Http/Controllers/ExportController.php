@@ -9,21 +9,22 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class ExportController extends Controller
 {
-    public function exportStruk(Transaksi $checkout)
+    public function exportStruk(Transaksi $transaksi)
     {
-        $checkout->load([
+        $transaksi->load([
             'user',
             'pemesanans.menu',
             'pembayaran'
         ]);
 
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.struk', [
-            'transaksi' => $checkout,
-            'pemesanans' => $checkout->pemesanans,
-            'pembayaran' => $checkout->pembayaran,
-            'user' => $checkout->user
+        $pdf = Pdf::loadView('pdf.struk', [
+            'transaksi' => $transaksi,
+            'pemesanans' => $transaksi->pemesanans,
+            'pembayaran' => $transaksi->pembayaran,
+            'user' => $transaksi->user
         ]);
 
-        return $pdf->download('struk_transaksi_' . $checkout->id . '.pdf');
+        return $pdf->download('struk_transaksi_' . $transaksi->id . '.pdf');
     }
+
 }
