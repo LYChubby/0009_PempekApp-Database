@@ -10,7 +10,8 @@ use App\Http\Controllers\{
     PembayaranController,
     RiwayatTransaksiController,
     PengeluaranController,
-    ExportController
+    ExportController,
+    KelolaBarangController
 };
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -50,6 +51,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Transaksi/Checkout (admin)
         Route::apiResource('checkout', TransaksiController::class)->only(['update', 'destroy']);
+
+        Route::apiResource('barang-masuk', kelolaBarangController::class);
 
 
         // Pengeluaran (admin)
