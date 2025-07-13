@@ -16,6 +16,7 @@ class Pemesanan extends Model
         'jumlah',
         'harga_satuan',
         'total_harga',
+        'status_pesanan',
         'pengiriman',
         'metode_pembayaran',
         'status_bayar',

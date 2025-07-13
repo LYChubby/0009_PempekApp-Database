@@ -70,6 +70,7 @@ class PemesananController extends Controller
             'jumlah' => 'sometimes|integer|min:1',
             'harga_satuan' => 'sometimes|integer|min:0',
             'total_harga' => 'sometimes|integer|min:0',
+            'status_pesanan' => 'sometimes|string|in:diterima,diproses,dikirim,selesai',
         ]);
 
         $pemesanan->update($validated);

@@ -59,24 +59,35 @@ class TransaksiController extends Controller
         $request->validate([
             'status_bayar' => 'required|in:sudah,belum',
             'status' => 'required|in:pending,terverifikasi',
+            'status_pesanan' => 'required|in:diterima,diproses,dikirim,selesai',
         ]);
 
-        $transaksi = Transaksi::with('pembayaran')->findOrFail($id);
+        $transaksi = Transaksi::with(['pembayaran', 'pemesanans'])->findOrFail($id);
+
         $transaksi->update([
             'status_bayar' => $request->status_bayar,
         ]);
 
+        // ✅ update status_pesanan ke semua pemesanan terkait
+        foreach ($transaksi->pemesanans as $pemesanan) {
+            $pemesanan->update([
+                'status_pesanan' => $request->status_pesanan,
+            ]);
+        }
+
+        // ✅ update status pembayaran (jika ada)
         if ($request->has('status') && $transaksi->pembayaran) {
-        $transaksi->pembayaran->update([
-            'status' => $request->status,
+            $transaksi->pembayaran->update([
+                'status' => $request->status,
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Status transaksi berhasil diperbarui.',
+            'data' => $transaksi->load(['pemesanans', 'pembayaran']),
         ]);
     }
 
-        return response()->json([
-            'message' => 'Status bayar transaksi berhasil diperbarui.',
-            'data' => $transaksi,
-        ]);
-    }
 
     public function destroy($id)
     {

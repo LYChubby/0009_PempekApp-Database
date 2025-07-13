@@ -28,6 +28,7 @@ class RiwayatTransaksiController extends Controller
                 'metode_pembayaran' => $transaksi->metode_pembayaran,
                 'status_bayar' => $transaksi->status_bayar,
                 'status_pembayaran' => $transaksi->pembayaran->status ?? 'Belum Upload',
+                'status_pesanan' => optional($transaksi->pemesanans->first())->status_pesanan ?? '-',
                 'bukti_pembayaran' => $transaksi->pembayaran?->bukti_bayar ? asset('storage/' . $transaksi->pembayaran->bukti_bayar) : null,
                 'tanggal_transaksi' => $transaksi->created_at->toDateTimeString(),
                 'tanggal_bayar' => optional($transaksi->pembayaran?->created_at)->toDateTimeString(),

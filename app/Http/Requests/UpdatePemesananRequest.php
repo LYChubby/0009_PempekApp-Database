@@ -24,6 +24,7 @@ class UpdatePemesananRequest extends FormRequest
         return [
             'menu_id'       => 'sometimes|exists:menus,id',
             'jumlah'        => 'sometimes|integer|min:1',
+            'status_pesanan' => 'sometimes|string|in:diterima,diproses,dikirim,selesai',
             'pengiriman'    => 'sometimes|string',
             'metode_pembayaran'    => 'sometimes|string',
             'status_bayar'  => 'sometimes|in:sudah,belum',
